@@ -1,4 +1,5 @@
 from user import librarian
+import books as b
 
 
 def show_main_menue(user: librarian) -> str:
@@ -52,6 +53,15 @@ def logout() -> librarian:
     return set_guest_user()
 
 
+def add_book(book_catalogue: list[b.book]) -> list[b.book]:
+    """Add a book to the vault using different means, if supported."""
+    new_book = b.add_book_from_input()
+    book_catalogue.append(new_book)
+    return book_catalogue
+
+
+book_catalogue = []
+
 if __name__ == "__main__":
     run_program = True
     current_user = set_guest_user()
@@ -63,7 +73,7 @@ if __name__ == "__main__":
             print("Commands consist of single letters only.")
         match command:
             case "A":
-                print("not implemented")
+                book_catalogue = add_book(book_catalogue)
             case "C":
                 print("not implemented")
             case "D":
