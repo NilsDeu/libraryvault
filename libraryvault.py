@@ -7,24 +7,21 @@ def show_main_menue(user: librarian) -> str:
 
     print("*" * 10)
     print("LibraryManager")
-    if user.first_name != "guest" and user.last_name != "user":
-        # @fix userrole
-        print(f"Welcome {user.first_name} {user.last_name}")
+    print(f"Welcome {current_user}")
+    if current_user != default_user:
         print("[L]ogout")
     else:
-        print("Welcome guest")
         print("[L]ogin")
 
     print("[A]dd book")
     print("[D]elete book")
 
-    print ("L[i]st books.")
+    print ("L[i]st books")
     print("[C]eck out book")
     print("[R]eturn book")
 
     print("[U]ser management")
     print("[Q]uit")
-
 
 def add_librarian(first_name: str = "", last_name: str = "") -> librarian:
     """Creates a new librerian from user input."""
@@ -33,11 +30,6 @@ def add_librarian(first_name: str = "", last_name: str = "") -> librarian:
     if not last_name:
         last_name = input("Enter last name of librarian: ")
     return librarian(first_name, last_name)
-
-
-def set_guest_user() -> librarian:
-    """Set the defautl user as a librarian with name 'guest user'."""
-    return add_librarian("guest", "user")
 
 def list_all_books(book_catalogue: list[b.book]) -> None:
     for book in book_catalogue:
@@ -51,17 +43,18 @@ def login() -> librarian:
     # @todo load user data
     return add_librarian("", name)
 
-
-def logout() -> librarian:
+def logout(current_user: librarian, default_user: librarian) -> librarian:
     """Logs out current user by setting it to guest user."""
-    return set_guest_user()
+    current_user = default_user
+    return current_user
 
 
 book_catalogue = []
 
 if __name__ == "__main__":
     run_program = True
-    current_user = set_guest_user()
+    default_user = add_librarian("guest", "user")
+    current_user = default_user
 
     while run_program:
         show_main_menue(current_user)
@@ -81,7 +74,7 @@ if __name__ == "__main__":
                 else:
                     print("No books yet.")
             case "L":
-                if current_user.first_name == "guest":  # @fix w/ userrole
+                if current_user == default_user:  # @fix w/ userrole
                     current_user = login()
                 else:
                     current_user = logout()
