@@ -18,6 +18,7 @@ def show_main_menue(user: librarian) -> str:
     print("[A]dd book")
     print("[D]elete book")
 
+    print ("L[i]st books.")
     print("[C]eck out book")
     print("[R]eturn book")
 
@@ -38,6 +39,9 @@ def set_guest_user() -> librarian:
     """Set the defautl user as a librarian with name 'guest user'."""
     return add_librarian("guest", "user")
 
+def list_all_books(book_catalogue: list[b.book]) -> None:
+    for book in book_catalogue:
+        print(book)
 
 def login() -> librarian:
     """Login w/ username and passwort."""
@@ -53,13 +57,6 @@ def logout() -> librarian:
     return set_guest_user()
 
 
-def add_book(book_catalogue: list[b.book]) -> list[b.book]:
-    """Add a book to the vault using different means, if supported."""
-    new_book = b.add_book_from_input()
-    book_catalogue.append(new_book)
-    return book_catalogue
-
-
 book_catalogue = []
 
 if __name__ == "__main__":
@@ -73,11 +70,16 @@ if __name__ == "__main__":
             print("Commands consist of single letters only.")
         match command:
             case "A":
-                book_catalogue = add_book(book_catalogue)
+                book_catalogue = b.add_book(book_catalogue)
             case "C":
                 print("not implemented")
             case "D":
                 print("not implemented")
+            case "I":
+                if len(book_catalogue) > 1:
+                    list_all_books(book_catalogue)
+                else:
+                    print("No books yet.")
             case "L":
                 if current_user.first_name == "guest":  # @fix w/ userrole
                     current_user = login()
