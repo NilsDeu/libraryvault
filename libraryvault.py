@@ -1,4 +1,4 @@
-from gettext import translation as l10n
+from gettext import translation as l10n, gettext as _
 
 from user import librarian
 import books as b
@@ -9,21 +9,22 @@ def show_main_menue(user: librarian, vault_name: str) -> str:
 
     print("*" * 10)
     print(vault_name)
-    print(f"Welcome {current_user}")
+    print(_("Welcome, {user}").format(user=current_user))
+    print("*" * 10)
     if current_user != default_user:
-        print("[L]ogout")
+        print(_("[L]ogout"))
     else:
-        print("[L]ogin")
+        print(_("[L]ogin"))
 
-    print("[A]dd book")
-    print("[D]elete book")
+    print(_("[A]dd book"))
+    print(_("[D]elete book"))
 
-    print("L[i]st books")
-    print("[C]eck out book")
-    print("[R]eturn book")
+    print(_("L[i]st books"))
+    print(_("[C]eck out book"))
+    print(_("[R]eturn book"))
 
-    print("[U]ser management")
-    print("[Q]uit")
+    print(_("[U]ser management"))
+    print(_("[Q]uit"))
 
 
 def add_librarian(first_name: str = "", last_name: str = "") -> librarian:
@@ -42,8 +43,8 @@ def list_all_books(book_catalogue: list[b.book]) -> None:
 
 def login() -> librarian:
     """Login w/ username and passwort."""
-    name = input("enter user name: ")
-    # passwort = input("enter passwort: ")
+    name = input(_("enter user name: "))
+    # passwort = input(_("enter passwort: "))
     # @todo passwort check
     # @todo load user data
     return add_librarian("", name)
@@ -55,10 +56,10 @@ def logout(current_user: librarian, default_user: librarian) -> librarian:
     return current_user
 
 
-appname = "libraryVault"
+vault_name = "libraryVault"
 localedir = "./locales"
-system_language = l10n(appname, localedir, fallback=True, languages=["en"])
-_ = system_language.gettext
+domain = localedir + "/" + vault_name
+system_language = l10n(domain, localedir, fallback=True, languages=["en"])
 
 book_catalogue = []
 
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     current_user = default_user
 
     while run_program:
-        show_main_menue(current_user, appname)
+        show_main_menue(current_user, vault_name)
         command = input(_("Your Choice: ")).upper()
         if len(command) > 1:
             print(_("Commands consist of single letters only."))
@@ -76,7 +77,7 @@ if __name__ == "__main__":
             case "A":
                 book_catalogue = b.add_book(book_catalogue)
             case "C":
-                print("not implemented")
+                print(_("not implemented"))
             case "D":
                 print(_("not implemented"))
             case "I":
